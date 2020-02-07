@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  # node-service:
+  #   build:
+  #     context: .
+  #     args:
+  #       - NODE_ENV=production
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     # - 8888:8888
+  #   restart: unless-stopped
+  #   command: npm run prod
+
+  mariadb-service:
+    image: linuxserver/mariadb
+    volumes:
+      - v_mariadb:/config
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+
+  grafana-service:
+    image: grafana/grafana
+    volumes:
+      - v_grafana:/config
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+volumes:
+  v_mariadb:
+  v_grafana:

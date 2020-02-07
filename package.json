@@ -1,0 +1,22 @@
+{
+  "name": "NodeTsProject",
+  "version": "1.0.0",
+  "description": "Node Typescript template project",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "concurrently -k -n \"Typescript,Node\" -p \"[{name}]\" -c \"blue,green\" \"npx tsc --watch\" \"nodemon -L --inspect=0.0.0.0:9229 dist/index.js\"",
+    "prod": "node dist/index.js"
+  },
+  "author": "Talbourdet Julien",
+  "license": "ISC",
+  "dependencies": {
+    "netatmo": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.0",
+    "concurrently": "^5.1.0",
+    "nodemon": "^2.0.2",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5"
+  }
+}

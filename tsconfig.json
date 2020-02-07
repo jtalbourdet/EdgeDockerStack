@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "target": "es6",
+        "strict": true,
+        "sourceMap": true
+    },
+    "include": [
+        "src/**/*"
+    ]
+  }
