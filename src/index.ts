@@ -1,22 +1,11 @@
-// import * from "./test";
-//import msg from "./test";
-//import msg = require('./test');
-console.log('bonjour salut sa marche');
+import demoClass from "./testModule" 
 
 
+const demo = new demoClass
 
 
-class testh{
-    varTest:number;
-    constructor () {
-        this.varTest=8
-    }
+function testFct() {
+    demo.demoMsg()
 }
 
-var testCl =new testh;
-setInterval(fcttest,3000)
-function fcttest(){
-    console.log(testCl.varTest)
-}
-console.log('hello')
-//console.log(msg)
+setInterval(testFct,3000)

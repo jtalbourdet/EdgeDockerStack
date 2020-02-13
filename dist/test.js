@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var msg = "hello wago";
-export default msg;
+exports.msg = msg;
 //# sourceMappingURL=test.js.map

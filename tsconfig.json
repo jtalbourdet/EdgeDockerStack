@@ -2,10 +2,20 @@
     "compilerOptions": {
         "outDir": "dist",
         "target": "es6",
+        "module": "commonjs",
         "strict": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "node",
     },
     "include": [
-        "src/**/*"
-    ]
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "tests/**/*.ts",
+        "tests/**/*.tsx"
+      ],
+      "exclude": [
+        "node_modules"
+      ]
   }

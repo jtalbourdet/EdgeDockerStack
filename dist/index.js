@@ -1,18 +1,9 @@
 "use strict";
-// import * from "./test";
-//import msg from "./test";
-//import msg = require('./test');
-console.log('bonjour salut sa marche');
-class testh {
-    constructor() {
-        this.varTest = 8;
-    }
+Object.defineProperty(exports, "__esModule", { value: true });
+const testModule_1 = require("./testModule");
+const demo = new testModule_1.default;
+function testFct() {
+    demo.demoMsg();
 }
-var testCl = new testh;
-setInterval(fcttest, 3000);
-function fcttest() {
-    console.log(testCl.varTest);
-}
-console.log('hello');
-//console.log(msg)
+setInterval(testFct, 3000);
 //# sourceMappingURL=index.js.map
