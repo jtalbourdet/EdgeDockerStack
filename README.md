@@ -1,13 +1,14 @@
 # Indroduction
 
-GMND-Boilerplate is a template for working with Grafana, MariaDB and NodeJs/TypeScript on Docker.
+GMND-Boilerplate is a template for working with Grafana, MariaDB and Python 3.5 on Docker. 
+The [Portainer](https://www.portainer.io/) utility is also integrated into this project in order to facilitate the administration and monitoring of containers
 
 ## Prerequisites
 
 Before using GMND-Boilerplate, you must install the following software.
 
-* nodejs
-* npm
+* Python >= 3.5
+* Pip >=20.0.2
 * Docker and Docker-compose
 
 ## Installation
@@ -26,10 +27,10 @@ Start the MariaDB and Grafana instances conatainers.
 docker-compose -f "docker-compose.yml" up -d --build
 ```
 
-Start in dev mode your Nodejs/TypeScript application.
+Start in dev mode your Python 3.5 application.
 
 ```
-npm run dev
+python main.py
 ```
 
 ## Run in production mode
@@ -37,21 +38,17 @@ npm run dev
 Uncomment the folowing lines in the docker-compose.yml file.
 
 ```
-# node-service:
+#python-service:
   #   build:
-  #     context: .
-  #     args:
-  #       - NODE_ENV=production
+  #     context: ./docker
+  #     dockerfile: dockerfile-python
   #   volumes:
   #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     # - 8888:8888
   #   restart: unless-stopped
-  #   command: npm run prod
+  #   command: python ./main.py
 ```
 
-Start the MariaDB, Grafana and Nodejs instances conatainers.
+Start the MariaDB, Grafana and Python 3.5 instances conatainers.
 
 ```
 docker-compose -f "docker-compose.yml" up -d --build
@@ -61,15 +58,19 @@ docker-compose -f "docker-compose.yml" up -d --build
 
 ### MariaDB
 
-A volume v mariadb is created for the persistence of mariadb data
+A v mariadb volume is created for the persistence of mariadb data
 
 ### Grafana
 
 A v_grafana volume is created for the persistence of grafana data
 
-### Nodejs
+### Portainer
 
-This project directory is mounted as a volume for the Nodejs container
+A v_portainer volume is created for the persistence of portainer data
+
+### Python
+
+This project directory is mounted as a volume for the Python 3.5 container
 
 ## Contributing
 

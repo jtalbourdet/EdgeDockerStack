@@ -1,18 +1,14 @@
 version: '3'
 
 services:
-  # node-service:
+  # python-service:
   #   build:
   #     context: .
-  #     args:
-  #       - NODE_ENV=production
+  #     dockerfile: dockerfile-python
   #   volumes:
   #     - .:/usr/src/app
-  #     - /usr/src/app/node_modules
-  #   ports:
-  #     # - 8888:8888
   #   restart: unless-stopped
-  #   command: npm run prod
+  #   command: python ./main.py
 
   mariadb-service:
     image: linuxserver/mariadb
@@ -23,12 +19,24 @@ services:
     restart: unless-stopped
 
   grafana-service:
-    image: grafana/grafana
+    build:
+      context: .
+      dockerfile: dockerfile-grafana
     volumes:
       - v_grafana:/config
     ports:
       - 3000:3000
     restart: unless-stopped
+
+  portainer-service:
+    image: portainer/portainer
+    volumes:
+      - v_portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9000:9000
+    restart: unless-stopped
 volumes:
   v_mariadb:
   v_grafana:
+  v_portainer:
