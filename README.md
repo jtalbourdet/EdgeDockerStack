@@ -72,6 +72,12 @@ A v_portainer volume is created for the persistence of portainer data
 
 This project directory is mounted as a volume for the Python 3.5 container
 
+## Python project
+
+The entry point for the python project is the main.py file. This project integrates the ORM [SQLAlchemy](https://www.sqlalchemy.org/) and the client OPC-UA [FreeOpcUa/Python OPC-UA](https://github.com/FreeOpcUa/python-opcua).
+
+In order to configure the connections you can rename the file 'template.config.yml' to 'config.yml' and enter the different connection parameters there.
+
 ## Contributing
 
 1. Fork it!

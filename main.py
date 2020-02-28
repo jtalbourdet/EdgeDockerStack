@@ -1,18 +1,29 @@
 #! /usr/bin/env python3
-from config import Config
+from core.database import db
+from core.opcua import uaClient, ua
 from models import Base
-from sqlalchemy import create_engine
 
-print(Config.DB_URL)
 
-dbCon ='mysql+pymysql://' + Config.USER
-dbCon = dbCon + '@'
-dbCon = dbCon + Config.URL
-dbCon = dbCon + ':'
-dbCon = dbCon + Config.PORT
-dbCon = dbCon + '/'
-dbCon = dbCon + Config.DATABASE
-engine = create_engine(dbCon)
+#
+# Database usage
+#
+Base.metadata.create_all(db)
+print(db.table_names())
 
-Base.metadata.create_all(engine)
-print(engine.table_names())
+#
+# OPC-UA Client usage
+#
+# try:
+#     uaClient.connect()
+
+#     uaVarPression = uaClient.get_node("ns=4;s=|var|WAGO 750-8212 PFC200 G2 2ETH RS.Application.PLC_PRG.Pression")
+#     uaVarTempBull = uaClient.get_node("ns=4;s=|var|WAGO 750-8212 PFC200 G2 2ETH RS.Application.PLC_PRG.Temperature")
+
+#     while True:
+#         pression = uaVarPression.get_value()
+#         temperature = uaVarTempBull.get_value()
+#         os.system('cls')
+#         print('Pression: ' + str(pression))
+#         print('Température: ' + str(temperature))
+# finally:
+#     uaClient.disconnect()
