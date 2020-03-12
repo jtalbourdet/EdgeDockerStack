@@ -23,7 +23,7 @@ services:
       context: .
       dockerfile: dockerfile-grafana
     volumes:
-      - v_grafana:/config
+      - v_grafana:/var/lib/grafana
     ports:
       - 3000:3000
     restart: unless-stopped
