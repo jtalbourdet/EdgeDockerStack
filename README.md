@@ -12,9 +12,16 @@ The [Portainer](https://www.portainer.io/) utility is also integrated into this 
 
 Before using GMND-Boilerplate, you must install the following software.
 
+### On your developpement platform
+
 * Python >= 3.5
 * Pip >=20.0.2
-* Docker and Docker-compose
+* Docker
+* Docker-compose
+
+### On your production platform
+
+
 
 ## Run in developpment mode
 

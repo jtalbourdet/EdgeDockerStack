@@ -1,16 +1,16 @@
 version: '3'
 
 services:
-  python-service:
-    build:
-      context: .
-      dockerfile: dockerfile-python
-    volumes:
-      - .:/usr/src/app
-    restart: unless-stopped
-    environment:
-      - PYTHONPATH=/usr/lib/python3.8/site-packages
-    command: python ./main.py
+  # python-service:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile-python
+  #   volumes:
+  #     - .:/usr/src/app
+  #   restart: unless-stopped
+  #   environment:
+  #     - PYTHONPATH=/usr/lib/python3.8/site-packages
+  #   command: python ./main.py
 
   mariadb-service:
     image: linuxserver/mariadb:arm32v7-110.4.12mariabionic-ls57
