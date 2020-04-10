@@ -14,6 +14,8 @@ Before using GMND-Boilerplate, you must install the following software.
 
 ### On your developpement platform
 
+I start from the principle where you run your python script directly on the development machine to facilitate debugging and save time.
+
 * Python >= 3.5
 * Pip >=20.0.2
 * Docker
@@ -21,6 +23,8 @@ Before using GMND-Boilerplate, you must install the following software.
 
 ### On your production platform
 
+* Docker
+* Docker-compose
 
 
 ## Run in developpment mode
@@ -43,12 +47,15 @@ Uncomment the folowing lines in the docker-compose.yml file.
 
 ```
 #python-service:
+  # python-service:
   #   build:
-  #     context: ./docker
+  #     context: .
   #     dockerfile: dockerfile-python
   #   volumes:
   #     - .:/usr/src/app
   #   restart: unless-stopped
+  #   environment:
+  #     - PYTHONPATH=/usr/lib/python3.8/site-packages
   #   command: python ./main.py
 ```
 
@@ -62,7 +69,7 @@ docker-compose -f "docker-compose.yml" up -d --build
 
 ### MariaDB
 
-A v mariadb volume is created for the persistence of mariadb data
+A v_mariadb volume is created for the persistence of mariadb data
 
 ### Grafana
 
