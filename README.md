@@ -1,6 +1,9 @@
 # Indroduction
 
 GMND-Boilerplate is a template for working with Grafana, MariaDB and Python 3.5 on Docker. 
+
+The objective of this repository is to facilitate development as well as deployment on ARMv7 platform (in my case I use it on the PFC200 and TouchPanel of the company [WAGO-Contact](https://www.wago.com/global/open-automation/modular-software)).
+
 The [Portainer](https://www.portainer.io/) utility is also integrated into this project in order to facilitate the administration and monitoring of containers
 
 ## Prerequisites
@@ -10,14 +13,6 @@ Before using GMND-Boilerplate, you must install the following software.
 * Python >= 3.5
 * Pip >=20.0.2
 * Docker and Docker-compose
-
-## Installation
-
-Clone the repository and type the command below in your preferred terminal.
-
-```
-npm install
-```
 
 ## Run in developpment mode
 

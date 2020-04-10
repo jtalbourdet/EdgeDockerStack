@@ -5,7 +5,6 @@ Base = declarative_base()
 
 class Metric(Base):
     __tablename__ = 'metric'
-    name = Column(String(100), primary_key=True)
+    tag = Column(String(100), primary_key=True)
     dateTime = Column(DateTime)
     value = Column(Float)
-    tags = Column(JSON)

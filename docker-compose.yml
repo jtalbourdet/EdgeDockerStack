@@ -1,17 +1,24 @@
 version: '3'
 
 services:
-  # python-service:
-  #   build:
-  #     context: .
-  #     dockerfile: dockerfile-python
-  #   volumes:
-  #     - .:/usr/src/app
-  #   restart: unless-stopped
-  #   command: python ./main.py
+  python-service:
+    build:
+      context: .
+      dockerfile: dockerfile-python
+    volumes:
+      - .:/usr/src/app
+    restart: unless-stopped
+    environment:
+      - PYTHONPATH=/usr/lib/python3.8/site-packages
+    command: python ./main.py
 
   mariadb-service:
-    image: linuxserver/mariadb
+    image: linuxserver/mariadb:arm32v7-110.4.12mariabionic-ls57
+    environment:
+      - MYSQL_ROOT_PASSWORD=GMND
+      - MYSQL_DATABASE=GMND
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=GMND
     volumes:
       - v_mariadb:/config
     ports:
@@ -22,6 +29,8 @@ services:
     build:
       context: .
       dockerfile: dockerfile-grafana
+      args:
+        - GRAFANA_VERSION=6.7.2
     volumes:
       - v_grafana:/var/lib/grafana
     ports:
@@ -36,6 +45,7 @@ services:
     ports:
       - 9000:9000
     restart: unless-stopped
+
 volumes:
   v_mariadb:
   v_grafana:
