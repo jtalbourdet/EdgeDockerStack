@@ -4,6 +4,8 @@ GMND-Boilerplate is a template for working with Grafana, MariaDB and Python 3.5 
 
 The objective of this repository is to facilitate development as well as deployment on ARMv7 platform (in my case I use it on the PFC200 and TouchPanel of the company [WAGO-Contact](https://www.wago.com/global/open-automation/modular-software)).
 
+![arch](documentation/images/arch.png)
+
 The [Portainer](https://www.portainer.io/) utility is also integrated into this project in order to facilitate the administration and monitoring of containers
 
 ## Prerequisites
