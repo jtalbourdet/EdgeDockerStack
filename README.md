@@ -1,4 +1,25 @@
-# Indroduction
+# GMND-Boilerplate
+- [GMND-Boilerplate](#gmnd-boilerplate)
+  - [Indroduction](#indroduction)
+  - [Prerequisites](#prerequisites)
+    - [On your developpement platform](#on-your-developpement-platform)
+      - [Install on WAGO PFC200 or TouchPanel600](#install-on-wago-pfc200-or-touchpanel600)
+    - [On your production platform](#on-your-production-platform)
+  - [Run in developpment mode](#run-in-developpment-mode)
+  - [Run in production mode](#run-in-production-mode)
+    - [On WAGO PFC200 or TouchPanel600](#on-wago-pfc200-or-touchpanel600)
+  - [Docker container data persistence](#docker-container-data-persistence)
+    - [MariaDB](#mariadb)
+    - [Grafana](#grafana)
+    - [Portainer](#portainer)
+    - [Python](#python)
+  - [Python project](#python-project)
+  - [Contributing](#contributing)
+  - [Credits](#credits)
+  - [Liscence](#liscence)
+
+
+## Indroduction
 
 GMND-Boilerplate is a template for working with Grafana, MariaDB and Python 3.5 on Docker. 
 
@@ -21,6 +42,31 @@ I start from the principle where you run your python script directly on the deve
 * Docker
 * Docker-compose
 
+#### Install on WAGO PFC200 or TouchPanel600
+
+1. Install the docker ipk file [WAGO/docker-ipk](https://github.com/WAGO/docker-ipk)
+2. Install the docker-compose ipk file [WAGO/docker-compose-ipk](https://github.com/WAGO/docker-compose-ipk)
+3. Change the docker directory from the internal flash to the SD-Card
+   1. Formate the SD or µSD card in Ext4 from the Web-Based Managment (WBM) ![format-sd](documentation/images/format-sd.png)
+   2. Start SSH Client e.g. [Putty](https://www.putty.org/)
+      ```
+      login as `root`
+      password `wago`
+      ```
+   3. Edit the "/etc/docker/daemon.json" file
+      ```
+      nano  /etc/docker/daemon.json
+      ```
+
+      ```
+      {
+        "data-root":"/media/home/docker"
+      }
+      ```
+       Replace "home" with the name given during the formatting step 
+   4. Restart the PLC electrically
+4. Place the GMND-Boilerplate directory at the root of the SD card (can do this with [fileZilla](https://filezilla-project.org/) for example in FTP / FTPS or SFTP)
+
 ### On your production platform
 
 * Docker
@@ -29,7 +75,7 @@ I start from the principle where you run your python script directly on the deve
 
 ## Run in developpment mode
 
-Start the MariaDB and Grafana instances conatainers.
+Start the MariaDB, Portainer and Grafana instances conatainers.
 
 ```
 docker-compose -f "docker-compose.yml" up -d --build
@@ -59,11 +105,25 @@ Uncomment the folowing lines in the docker-compose.yml file.
   #   command: python ./main.py
 ```
 
-Start the MariaDB, Grafana and Python 3.5 instances conatainers.
+Start the MariaDB, Grafana, Portainer and Python 3.5 instances conatainers.
 
 ```
 docker-compose -f "docker-compose.yml" up -d --build
 ```
+### On WAGO PFC200 or TouchPanel600
+  1. Start SSH Client e.g. [Putty](https://www.putty.org/)
+      ```
+      login as `root`
+      password `wago`
+      ```
+  2. Go in the GMND-Boilerplate directory (at the root of the SD card)
+      ```
+      cd /media/sd/GMND-Boilerplate
+      ```
+  3. Start the MariaDB, Grafana, Portainer and Python 3.5 instances conatainers.
+      ```
+      docker-compose -f "docker-compose.yml" up -d --build
+      ```
 
 ## Docker container data persistence
 
