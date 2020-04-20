@@ -1,10 +1,10 @@
 # GMND-Boilerplate
-- [GMND-Boilerplate](#gmnd-boilerplate)
+
   - [Indroduction](#indroduction)
   - [Prerequisites](#prerequisites)
     - [On your developpement platform](#on-your-developpement-platform)
-      - [Install on WAGO PFC200 or TouchPanel600](#install-on-wago-pfc200-or-touchpanel600)
     - [On your production platform](#on-your-production-platform)
+      - [Install on WAGO PFC200 or TouchPanel600](#install-on-wago-pfc200-or-touchpanel600)
   - [Run in developpment mode](#run-in-developpment-mode)
   - [Run in production mode](#run-in-production-mode)
     - [On WAGO PFC200 or TouchPanel600](#on-wago-pfc200-or-touchpanel600)
@@ -17,7 +17,6 @@
   - [Contributing](#contributing)
   - [Credits](#credits)
   - [Liscence](#liscence)
-
 
 ## Indroduction
 
@@ -41,7 +40,12 @@ I start from the principle where you run your python script directly on the deve
 * Pip >=20.0.2
 * Docker
 * Docker-compose
+* 
+### On your production platform
 
+* Docker
+* Docker-compose
+  
 #### Install on WAGO PFC200 or TouchPanel600
 
 1. Install the docker ipk file [WAGO/docker-ipk](https://github.com/WAGO/docker-ipk)
@@ -66,12 +70,6 @@ I start from the principle where you run your python script directly on the deve
        Replace "home" with the name given during the formatting step 
    4. Restart the PLC electrically
 4. Place the GMND-Boilerplate directory at the root of the SD card (can do this with [fileZilla](https://filezilla-project.org/) for example in FTP / FTPS or SFTP)
-
-### On your production platform
-
-* Docker
-* Docker-compose
-
 
 ## Run in developpment mode
 
