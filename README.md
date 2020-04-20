@@ -40,12 +40,12 @@ I start from the principle where you run your python script directly on the deve
 * Pip >=20.0.2
 * Docker
 * Docker-compose
-* 
+
 ### On your production platform
 
 * Docker
 * Docker-compose
-  
+ 
 #### Install on WAGO PFC200 or TouchPanel600
 
 1. Install the docker ipk file [WAGO/docker-ipk](https://github.com/WAGO/docker-ipk)
