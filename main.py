@@ -1,8 +1,7 @@
 #! /usr/bin/env python3
-from core.database import db
-from core.opcua import uaClient, ua
-from models import Base
-
+# from core.database import db
+from core.opcua import Connections
+# from models import Base
 print('Python script start')
 # #
 # # Database usage with SQL-Alchemy and the model in 'models.py'
@@ -14,7 +13,13 @@ print('Python script start')
 # print(db.table_names())
 
 
+# # """App configuration."""
+# import yaml
 
+# with open("template.config.yml", 'r') as ymlfile:
+#     cfg = yaml.safe_load(ymlfile)
+# for ConfOPC in cfg['OPC-UA']:
+#     print(ConfOPC)
 
 
 
@@ -25,16 +30,18 @@ print('Python script start')
 # import time
 
 # try:
-#     uaClient.connect()
+#     uaPLCDemo1=Connections['PLC_Demo_1']
+#     uaPLCDemo1.connect()
 
-#     uaVarPression = uaClient.get_node("ns=4;s=|var|WAGO 750-8212 PFC200 G2 2ETH RS.Application.PLC_PRG.Pression")
+#     uaVarPression = uaPLCDemo1.get_node("ns=4;s=|var|WAGO 750-8212 PFC200 G2 2ETH RS.Application.CapteursActionneurs.rPress")
 
 #     while True:
 #         pression = uaVarPression.get_value()
-#         pression = pression + 2
-#         uaVarPression.set_value(pression, ua.VariantType.Float)
+#         print(pression)
+#         #pression = pression + 2
+#         #uaVarPression.set_value(pression, ua.VariantType.Float)
 #         time.sleep(0.1)
 # finally:
-#     uaClient.disconnect()
+#     uaPLCDemo1.disconnect()
 
 print('Python script stop')
