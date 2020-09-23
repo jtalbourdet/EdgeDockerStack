@@ -1,52 +1,81 @@
 version: '3'
 
 services:
-  # python-service:
-  #   build:
-  #     context: .
-  #     dockerfile: dockerfile-python
-  #   volumes:
-  #     - .:/usr/src/app
-  #   restart: unless-stopped
-  #   environment:
-  #     - PYTHONPATH=/usr/lib/python3.8/site-packages
-  #   command: python ./main.py
-
-  mariadb-service:
-    image: linuxserver/mariadb:arm32v7-110.4.12mariabionic-ls57
-    environment:
-      - MYSQL_ROOT_PASSWORD=GMND
-      - MYSQL_DATABASE=GMND
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=GMND
+  python-service:
+    build:
+      context: ./containers-confs/files/python/project/
+      dockerfile: dockerfile-python
     volumes:
-      - v_mariadb:/config
+      - ./containers-confs/files/python/project:/usr/src/app
+    restart: unless-stopped
+    environment:
+      - PYTHONPATH=/usr/lib/python3.8/site-packages
+    command: python ./main.py
+  mariadb-service:
+    image: linuxserver/mariadb:${MARIADB_VERSION}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${GENERIC_ADMIN_PASSWORD}
+      - MYSQL_DATABASE=GMND
+      - MYSQL_USER=${GENERIC_ADMIN_USERNAME}
+      - MYSQL_PASSWORD=${GENERIC_ADMIN_PASSWORD}
+    volumes:
+      - ./containers-datas/mariadb:/config
     ports:
       - 3306:3306
     restart: unless-stopped
 
   grafana-service:
-    build:
-      context: .
-      dockerfile: dockerfile-grafana
-      args:
-        - GRAFANA_VERSION=6.7.2
+    image: grafana/grafana:${GRAFANA_VERSION}
+    environment:
+      - GF_INSTALL_PLUGINS=bessler-pictureit-panel
     volumes:
-      - v_grafana:/var/lib/grafana
+      - ./containers-datas/grafana/data:/var/lib/grafana
+      - ./containers-confs/files/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./containers-confs/files/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./containers-confs/files/grafana/config/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./containers-confs/files/grafana/img:/usr/share/grafana/public/img:ro
     ports:
       - 3000:3000
     restart: unless-stopped
-
-  portainer-service:
-    image: portainer/portainer
+  influxdb-service:
+      image: influxdb:${INFLUXDB_VERSION}
+      ports:
+        - 8086:8086
+      volumes:
+        - ./containers-datas/influxdb/data:/var/lib/influxdb
+        - ./containers-confs/script/influxdb/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh:ro
+      environment:
+        - INFLUXDB_DB=db_gmnd
+        - INFLUXDB_HTTP_AUTH_ENABLED=true
+        - INFLUXDB_ADMIN_USER=${GENERIC_ADMIN_USERNAME}
+        - INFLUXDB_ADMIN_PASSWORD=${GENERIC_ADMIN_PASSWORD}
+      restart: unless-stopped
+  node-red-service:
+    image: nodered/node-red:${NODERED_VERSION}
     volumes:
-      - v_portainer:/data
+      - ./containers-confs/files/node-red/config:/data
+    ports:
+      - 1880:1880
+    restart: unless-stopped
+  telegraf-service:
+    image: telegraf:${TELEGRAF_VERSION}
+    volumes:
+      - ./containers-confs/files/telegraf/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc:/host/proc:ro
+    restart: unless-stopped
+    environment :
+      - HOST_PROC=/host/proc
+  mqtt-service:
+    image: eclipse-mosquitto:${MOSQUITTO_VERSION}
+    ports:
+      - "1883:1883"
+    restart: unless-stopped
+  portainer-service:
+    image: portainer/portainer:${PORTAINER_VERSION}
+    volumes:
+      - ./containers-datas/portainer/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 9000:9000
     restart: unless-stopped
-
-volumes:
-  v_mariadb:
-  v_grafana:
-  v_portainer:
