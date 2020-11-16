@@ -1,33 +1,18 @@
 version: '3'
 
 services:
-  python-service:
-    build:
-      context: ./containers-confs/files/python/project/
-      dockerfile: dockerfile-python
-    volumes:
-      - ./containers-confs/files/python/project:/usr/src/app
-    restart: unless-stopped
-    environment:
-      - PYTHONPATH=/usr/lib/python3.8/site-packages
-    command: python ./main.py
-  mariadb-service:
-    image: linuxserver/mariadb:${MARIADB_VERSION}
-    environment:
-      - MYSQL_ROOT_PASSWORD=${GENERIC_ADMIN_PASSWORD}
-      - MYSQL_DATABASE=GMND
-      - MYSQL_USER=${GENERIC_ADMIN_USERNAME}
-      - MYSQL_PASSWORD=${GENERIC_ADMIN_PASSWORD}
-    volumes:
-      - ./containers-datas/mariadb:/config
-    ports:
-      - 3306:3306
-    restart: unless-stopped
-
+  # python-service:
+  #   build:
+  #     context: ./containers-confs/files/python/project/
+  #     dockerfile: dockerfile-python
+  #   volumes:
+  #     - ./containers-confs/files/python/project:/usr/src/app
+  #   restart: unless-stopped
+  #   environment:
+  #     - PYTHONPATH=/usr/lib/python3.8/site-packages
+  #   command: python ./main.py
   grafana-service:
     image: grafana/grafana:${GRAFANA_VERSION}
-    environment:
-      - GF_INSTALL_PLUGINS=bessler-pictureit-panel
     volumes:
       - ./containers-datas/grafana/data:/var/lib/grafana
       - ./containers-confs/files/grafana/provisioning:/etc/grafana/provisioning:ro
@@ -39,24 +24,24 @@ services:
     restart: unless-stopped
   influxdb-service:
       image: influxdb:${INFLUXDB_VERSION}
-      ports:
-        - 8086:8086
+      # ports:
+      #   - 8086:8086
       volumes:
         - ./containers-datas/influxdb/data:/var/lib/influxdb
         - ./containers-confs/script/influxdb/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh:ro
       environment:
-        - INFLUXDB_DB=db_gmnd
+        - INFLUXDB_DB=db_metrics
         - INFLUXDB_HTTP_AUTH_ENABLED=true
-        - INFLUXDB_ADMIN_USER=${GENERIC_ADMIN_USERNAME}
+        - INFLUXDB_ADMIN_USER=${GENERIC_ADMIN_MAIL}
         - INFLUXDB_ADMIN_PASSWORD=${GENERIC_ADMIN_PASSWORD}
       restart: unless-stopped
-  node-red-service:
-    image: nodered/node-red:${NODERED_VERSION}
-    volumes:
-      - ./containers-confs/files/node-red/config:/data
-    ports:
-      - 1880:1880
-    restart: unless-stopped
+  # node-red-service:
+  #   image: nodered/node-red:${NODERED_VERSION}
+  #   volumes:
+  #     - ./containers-confs/files/node-red/config:/data
+  #   ports:
+  #     - 1880:1880
+  #   restart: unless-stopped
   telegraf-service:
     image: telegraf:${TELEGRAF_VERSION}
     volumes:
