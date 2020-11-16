@@ -1,0 +1,13 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    access: proxy
+    database: db_metrics
+    user: ---USERNAME---
+    password: ---PASSWORD---
+    url: http://influxdb-service:8086
+    editable: true
+    jsonData:
+      httpMode: GET
