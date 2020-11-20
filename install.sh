@@ -1,22 +1,33 @@
 #!/bin/bash
 
+
 CONF_FILE_PATH=".env"
+DOCKER_COMPOSE_FILE_PATH="docker-compose.yml"
+DOCKER_CONF_FILE_PATH="/etc/docker/daemon.json"
+INSTALL_LOG_FILE_PATH="installLogs.log"
 TELEGRAF_CONF_FILE_PATH="containers-confs/files/telegraf/config/telegraf.conf"
 GRAFANA_DATASOURCE_FILE_PATH="containers-confs/files/grafana/provisioning/datasources/datasource.yaml"
+
+wget https://github.com/Talbourdet/GMND-Boilerplate/archive/master.zip
+unzip master.zip
+rm master.zip
+chmod 777 -R GMND-Boilerplate
+
+cd GMND-Boilerplate
 
 
 if [ -x "$(command -v docker)" ]; then
     echo "* Docker already installed"
 else
     echo "* Docker ipk download"
-    wget https://github.com/WAGO/docker-ipk/releases/download/v1.0.3/docker_19.03.13_armhf.ipk
+    wget https://github.com/WAGO/docker-ipk/releases/download/v1.0.3/docker_19.03.13_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
     echo "* Docker ipk installation"
-    opkg install docker_19.03.13_armhf.ipk
-    rm docker_19.03.13_armhf.ipk
+    opkg install docker_19.03.13_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
+    rm docker_19.03.13_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
 fi
 
 echo "* Stop Docker daemon"
-/etc/init.d/dockered stop
+/etc/init.d/dockerd stop >> $INSTALL_LOG_FILE_PATH 2>&1
 sdVolumeName=$(df -h | grep -w 'dev' | grep -w 'media' | sed 's/.*media\///' | sed 's/\/.*//' | sed '2,100 d')
 if [ -z $sdVolumeName ]; then
     echo "* No SD or µSD card detected"
@@ -29,48 +40,62 @@ else
     fi
     echo "* Use $sdVolumeName"
     echo "* Replace Docker directory from /home/docker to /media/$sdVolumeName/docker"
-    sed "s/\"data-root\":\"\/.*\/docker\",/\"data-root\":\"\/media\/$sdVolumeName\/docker\",/" /etc/docker/daemon.json
+    sed -i "s/\"data-root\":\"\/.*\/docker\",/\"data-root\":\"\/media\/$sdVolumeName\/docker\",/" $DOCKER_CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
 fi
 echo "* Start Docker daemon"
-/etc/init.d/dockered stop
-if [ -x "$(command -v docker)" ]; then
+/etc/init.d/dockerd start >> $INSTALL_LOG_FILE_PATH 2>&1
+if [ -x "$(command -v docker-compose)" ]; then
     echo "* Docker-compose already installed"
 else
     echo "* Docker-compose ipk download"
-    wget https://github.com/WAGO/docker-compose-ipk/raw/master/docker_compose_1.21.1_armhf.ipk
+    wget https://github.com/WAGO/docker-compose-ipk/raw/master/docker_compose_1.21.1_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
     echo "* Docker-compose ipk installation"
-    opkg install docker_compose_1.21.1_armhf.ipk
-    rm docker_19.03.13_armhf.ipk
+    opkg install docker_compose_1.21.1_armhf.ipk    >> $INSTALL_LOG_FILE_PATH 2>&1
+    rm docker_compose_1.21.1_armhf.ipk              >> $INSTALL_LOG_FILE_PATH 2>&1
 fi
 
 echo "* Create configuration directory \"containers-confs\""
-cp -r containers-confs-template containers-confs
+cp -r containers-confs-template containers-confs    >> $INSTALL_LOG_FILE_PATH 2>&1
 echo "* Create configuration file \".env\""
-cp .env-template .env
+cp .env-template .env                               >> $INSTALL_LOG_FILE_PATH 2>&1
 
+read -p "* Activate node-red container (yes/no) : [no]" activateNodeRed
+if [ $activateNodeRed = "yes"  ] || [ $activateNodeRed = "YES"  ]; then
+    echo "* Activate node-red container"
+    sed -i "s/  # node-red-service:/  node-red-service:/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+    sed -i "s/  #   image: nodered\/node-red:\${NODERED_VERSION}/    image: nodered\/node-red:\${NODERED_VERSION}/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+    sed -i "s/  #   volumes:/    volumes:/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+    sed -i "s/  #     - .\/containers-confs\/files\/node-red\/config:\/data/      - .\/containers-confs\/files\/node-red\/config:\/data/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+    sed -i "s/  #   ports:/    ports:/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+    sed -i "s/  #     - 1880:1880/      - 1880:1880/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+    sed -i "s/  #   restart: unless-stopped/    restart: unless-stopped/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+elif [ $activateNodeRed = "no"  ] || [ $activateNodeRed = "NO"  ]; then
+    echo "* Desactivate node-red container"
+else
+    echo "* Desactivate node-red container"
+fi
 
 read -p "* Create Admin username:" adminUserName
 read -p "* Create Admin password:" adminPassword
 
 echo "* Configure influxdb username and password"
-sed "s/GENERIC_ADMIN_USER=.*/GENERIC_ADMIN_USER=$adminUserName/" $CONF_FILE_PATH > $CONF_FILE_PATH
-sed "s/GENERIC_ADMIN_PASSWORD=.*/GENERIC_ADMIN_PASSWORD=$adminPassword/" $CONF_FILE_PATH > $CONF_FILE_PATH
+sed -i "s/GENERIC_ADMIN_USER=.*/GENERIC_ADMIN_USER=$adminUserName/" $CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+sed -i "s/GENERIC_ADMIN_PASSWORD=.*/GENERIC_ADMIN_PASSWORD=$adminPassword/" $CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
 
 echo "* Configure grafana influxdb datasource"
-sed "s/user:.*/user:$adminUserName/" $GRAFANA_DATASOURCE_FILE_PATH > $GRAFANA_DATASOURCE_FILE_PATH
-sed "s/password:.*/password:$adminPassword/" $GRAFANA_DATASOURCE_FILE_PATH > $GRAFANA_DATASOURCE_FILE_PATH
-
+sed -i "s/user:.*/user: $adminUserName/" $GRAFANA_DATASOURCE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+sed -i "s/password:.*/password: $adminPassword/" $GRAFANA_DATASOURCE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
 echo "* Configure telegraf influxdb connection"
-sed "s/username =.*/username = \"$adminUserName\"/" $TELEGRAF_CONF_FILE_PATH > $TELEGRAF_CONF_FILE_PATH
-sed "s/password =.*/password = \"$adminPassword\"/" $TELEGRAF_CONF_FILE_PATH > $TELEGRAF_CONF_FILE_PATH
+sed -i "s/username =.*/username = \"$adminUserName\"/" $TELEGRAF_CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+sed -i "s/password =.*/password = \"$adminPassword\"/" $TELEGRAF_CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
 
 
 
 echo "* Create containers"
-docker-compose -f "docker-compose.yml" up -d --build
+docker-compose -f "docker-compose.yml" up -d --build >> $INSTALL_LOG_FILE_PATH 2>&1
 
+echo "* Installation logs are avaliable in installLogs.log file"
+echo "* You can now publish your MQTT message on the influxdb\/ topic and visualize them in Grafana from the db_metrics database"
 
-echo "* You can now publish your MQTT message on the metrics\/ topic and visualize them in Grafana from the db_metrics database"
-
-
-
+cd ..
+rm install.sh

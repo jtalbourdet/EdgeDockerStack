@@ -1,16 +1,6 @@
 version: '3'
 
 services:
-  # python-service:
-  #   build:
-  #     context: ./containers-confs/files/python/project/
-  #     dockerfile: dockerfile-python
-  #   volumes:
-  #     - ./containers-confs/files/python/project:/usr/src/app
-  #   restart: unless-stopped
-  #   environment:
-  #     - PYTHONPATH=/usr/lib/python3.8/site-packages
-  #   command: python ./main.py
   grafana-service:
     image: grafana/grafana:${GRAFANA_VERSION}
     volumes:
@@ -31,8 +21,9 @@ services:
         - ./containers-confs/script/influxdb/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh:ro
       environment:
         - INFLUXDB_DB=db_metrics
+        - INFLUXDB_ADMIN_ENABLED=true
         - INFLUXDB_HTTP_AUTH_ENABLED=true
-        - INFLUXDB_ADMIN_USER=${GENERIC_ADMIN_MAIL}
+        - INFLUXDB_ADMIN_USER=${GENERIC_ADMIN_USER}
         - INFLUXDB_ADMIN_PASSWORD=${GENERIC_ADMIN_PASSWORD}
       restart: unless-stopped
   # node-red-service:

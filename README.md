@@ -2,7 +2,7 @@
 
 ## Indroduction
 
-GMND-Boilerplate is a template for working with Grafana, Influx, Mqtt and optionnaliy (Python 3.5 and Node-red) on Docker. 
+GMND-Boilerplate is a template for working with Grafana, Influx, Mqtt and optionnaliy (Node-red) on Docker. 
 
 The objective of this repository is to facilitate development as well as deployment on ARMv7 platform (in my case I use it on the PFC200 and TouchPanel of the company [WAGO-Contact](https://www.wago.com/global/open-automation/modular-software)).
 
