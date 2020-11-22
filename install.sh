@@ -8,11 +8,14 @@ INSTALL_LOG_FILE_PATH="installLogs.log"
 TELEGRAF_CONF_FILE_PATH="containers-confs/files/telegraf/config/telegraf.conf"
 GRAFANA_DATASOURCE_FILE_PATH="containers-confs/files/grafana/provisioning/datasources/datasource.yaml"
 
-wget https://github.com/Talbourdet/GMND-Boilerplate/archive/master.zip
-unzip master.zip
-rm master.zip
-chmod 777 -R GMND-Boilerplate-master
+echo "* Download GMND repository"
+wget https://github.com/Talbourdet/GMND-Boilerplate/archive/master.zip >> $INSTALL_LOG_FILE_PATH 2>&1
+echo "* Unzip GMND content"
+unzip master.zip >> $INSTALL_LOG_FILE_PATH 2>&1
+rm master.zip >> $INSTALL_LOG_FILE_PATH 2>&1
+chmod 777 -R GMND-Boilerplate-master >> $INSTALL_LOG_FILE_PATH 2>&1
 
+cp $INSTALL_LOG_FILE_PATH GMND-Boilerplate-master/$INSTALL_LOG_FILE_PATH
 cd GMND-Boilerplate-master
 
 
