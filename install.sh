@@ -27,7 +27,7 @@ unzip master.zip >> $INSTALL_LOG_FILE_PATH 2>&1
 rm master.zip >> $INSTALL_LOG_FILE_PATH 2>&1
 chmod 777 -R GMND-Boilerplate-master >> $INSTALL_LOG_FILE_PATH 2>&1
 
-cp $INSTALL_LOG_FILE_PATH GMND-Boilerplate-master/$INSTALL_LOG_FILE_PATH
+mv $INSTALL_LOG_FILE_PATH GMND-Boilerplate-master/$INSTALL_LOG_FILE_PATH
 cd GMND-Boilerplate-master
 
 
