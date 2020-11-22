@@ -11,9 +11,9 @@ GRAFANA_DATASOURCE_FILE_PATH="containers-confs/files/grafana/provisioning/dataso
 wget https://github.com/Talbourdet/GMND-Boilerplate/archive/master.zip
 unzip master.zip
 rm master.zip
-chmod 777 -R GMND-Boilerplate
+chmod 777 -R GMND-Boilerplate-master
 
-cd GMND-Boilerplate
+cd GMND-Boilerplate-master
 
 
 if [ -x "$(command -v docker)" ]; then
