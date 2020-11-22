@@ -7,6 +7,22 @@ DOCKER_CONF_FILE_PATH="/etc/docker/daemon.json"
 INSTALL_LOG_FILE_PATH="installLogs.log"
 TELEGRAF_CONF_FILE_PATH="containers-confs/files/telegraf/config/telegraf.conf"
 GRAFANA_DATASOURCE_FILE_PATH="containers-confs/files/grafana/provisioning/datasources/datasource.yaml"
+echo"
+      ::::::::         :::   :::       ::::    :::       ::::::::: 
+    :+:    :+:       :+:+: :+:+:      :+:+:   :+:       :+:    :+: 
+   +:+             +:+ +:+:+ +:+     :+:+:+  +:+       +:+    +:+  
+  :#:             +#+  +:+  +#+     +#+ +:+ +#+       +#+    +:+   
+ +#+   +#+#      +#+       +#+     +#+  +#+#+#       +#+    +#+    
+#+#    #+#      #+#       #+#     #+#   #+#+#       #+#    #+#     
+########       ###       ###     ###    ####       #########       
+
+GMND-Boilerplate intallation from https://github.com/Talbourdet/GMND-Boilerplate   
+
+
+""
+
+
+
 
 echo "* Download GMND repository"
 wget https://github.com/Talbourdet/GMND-Boilerplate/archive/master.zip >> $INSTALL_LOG_FILE_PATH 2>&1
