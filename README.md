@@ -12,7 +12,7 @@
 
 GMND-Boilerplate is a template for working with Grafana, Influx, Mqtt an d Node-red on Docker. 
 
-The objective of this repository is to facilitate deployment on WAGO PFC200 and Touch-Panels [WAGO-Contact](https://www.wago.com)).
+The objective of this repository is to facilitate deployment on WAGO PFC200 and Touch-Panels [WAGO-Contact](https://www.wago.com).
 
 The [Portainer](https://www.portainer.io/) utility is also integrated into this project in order to facilitate the administration and monitoring of containers
 
