@@ -104,7 +104,8 @@ echo "* Configure telegraf influxdb connection"
 sed -i "s/username =.*/username = \"$adminUserName\"/" $TELEGRAF_CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
 sed -i "s/password =.*/password = \"$adminPassword\"/" $TELEGRAF_CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
 
-
+mkdir containers-datas
+chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
 
 echo "* Create containers"
 docker-compose -f "docker-compose.yml" up -d --build >> $INSTALL_LOG_FILE_PATH 2>&1
@@ -112,7 +113,6 @@ docker-compose -f "docker-compose.yml" up -d --build >> $INSTALL_LOG_FILE_PATH 2
 echo "* Installation logs are avaliable in installLogs.log file"
 echo "* You can now publish your MQTT message on the influxdb\/ topic and visualize them in Grafana from the db_metrics database"
 
-chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
 
 cd ..
 rm install.sh
