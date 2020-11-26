@@ -107,14 +107,13 @@ echo "* Configure telegraf influxdb connection"
 sed -i "s/username =.*/username = \"$adminUserName\"/" $TELEGRAF_CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
 sed -i "s/password =.*/password = \"$adminPassword\"/" $TELEGRAF_CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
 
-
 mkdir containers-datas
 chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
-chmod 777 -R containers-confs >> $INSTALL_LOG_FILE_PATH 2>&1
 
 echo "* Create containers"
 docker-compose -f "docker-compose.yml" up -d >> $INSTALL_LOG_FILE_PATH 2>&1
 
+chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
 
 echo "* Installation logs are avaliable in installLogs.log file"
 echo " "
