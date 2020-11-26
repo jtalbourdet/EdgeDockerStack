@@ -1,13 +1,5 @@
 # GMND-Boilerplate
-```
-      ::::::::         :::   :::       ::::    :::       :::::::::
-    :+:    :+:       :+:+: :+:+:      :+:+:   :+:       :+:    :+:
-   +:+             +:+ +:+:+ +:+     :+:+:+  +:+       +:+    +:+ 
-  :#:             +#+  +:+  +#+     +#+ +:+ +#+       +#+    +:+  
- +#+   +#+#      +#+       +#+     +#+  +#+#+#       +#+    +#+   
-#+#    #+#      #+#       #+#     #+#   #+#+#       #+#    #+#    
-########       ###       ###     ###    ####       #########  
-```
+
 ## Indroduction
 
 GMND-Boilerplate is a template for working with Grafana, Influx, Mqtt an d Node-red on Docker. 
@@ -15,10 +7,19 @@ GMND-Boilerplate is a template for working with Grafana, Influx, Mqtt an d Node-
 The objective of this repository is to facilitate deployment on WAGO PFC200 and Touch-Panels [WAGO-Contact](https://www.wago.com).
 
 The [Portainer](https://www.portainer.io/) utility is also integrated into this project in order to facilitate the administration and monitoring of containers
+## Prerequisite
+
+Docker and Docker-compose must have been installed
+
+### Wago Hardawares (PFC200 and TP600)
+
+Follow the explanations of these two repositories in order to correctly install docker and docker-compose on your target wago
+
+Readme [WAGO/docker-ipk](https://github.com/WAGO/docker-ipk)
+
+Readme [WAGO/docker-compose-ipk](https://github.com/WAGO/docker-compose-ipk)
 
 ## Installation
-
-Currently the installation has been tested with firmware 17 on PFC200 but should also work on Touch-Panels
 
 Make sure you have your equipment connected to the network with internet access (do not forget to configure the DNS and the gateway address)
 
@@ -36,6 +37,12 @@ wget -O install.sh https://raw.githubusercontent.com/Talbourdet/GMND-Boilerplate
 /bin/bash install.sh
 ```
 Let the script do and answer the questions. the complete installation can take between 15 and 30 minutes depending on the speed of your connection.
+
+As soon as the installation is complete, the various services are accessible according to the following URLs
+
+* Grafana at http://[IP ADRESS]:3000
+* Portainer at http://[IP ADRESS]:9000
+* Node-red at http://[IP ADRESS]:1880
 
 ## Detailed information
 

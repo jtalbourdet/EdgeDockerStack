@@ -32,41 +32,41 @@ cd GMND-Boilerplate-master
 
 
 if [ -x "$(command -v docker)" ]; then
-    echo "* Docker already installed"
+    echo "* Docker installation: OK"
 else
-    echo "* Docker ipk download"
-    wget https://github.com/WAGO/docker-ipk/releases/download/v1.0.3/docker_19.03.13_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
-    echo "* Docker ipk installation"
-    opkg install docker_19.03.13_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
-    rm docker_19.03.13_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
+    echo "* Docker is not installed please refer to https://github.com/WAGO/docker-ipk"
+    # wget https://github.com/WAGO/docker-ipk/releases/download/v1.0.3/docker_19.03.13_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
+    # echo "* Docker ipk installation"
+    # opkg install docker_19.03.13_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
+    # rm docker_19.03.13_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
 fi
 
-echo "* Stop Docker daemon"
-/etc/init.d/dockerd stop >> $INSTALL_LOG_FILE_PATH 2>&1
-sdVolumeName=$(df -h | grep -w 'dev' | grep -w 'media' | sed 's/.*media\///' | sed 's/\/.*//' | sed '2,100 d')
-if [ -z $sdVolumeName ]; then
-    echo "* No SD or µSD card detected"
-else
-    read -p "* Enter or confirm the SD or µSD volume name : [$sdVolumeName]" newSdVolumeName
-    if [ -z $newSdVolumeName ]; then
-        sdVolumeName=$sdVolumeName
-    else
-        sdVolumeName=$newSdVolumeName
-    fi
-    echo "* Use $sdVolumeName"
-    echo "* Replace Docker directory from /home/docker to /media/$sdVolumeName/docker"
-    sed -i "s/\"data-root\":\"\/.*\/docker\",/\"data-root\":\"\/media\/$sdVolumeName\/docker\",/" $DOCKER_CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
-fi
-echo "* Start Docker daemon"
-/etc/init.d/dockerd start >> $INSTALL_LOG_FILE_PATH 2>&1
+# echo "* Stop Docker daemon"
+# /etc/init.d/dockerd stop >> $INSTALL_LOG_FILE_PATH 2>&1
+# sdVolumeName=$(df -h | grep -w 'dev' | grep -w 'media' | sed 's/.*media\///' | sed 's/\/.*//' | sed '2,100 d')
+# if [ -z $sdVolumeName ]; then
+#     echo "* No SD or µSD card detected"
+# else
+#     read -p "* Enter or confirm the SD or µSD volume name : [$sdVolumeName]" newSdVolumeName
+#     if [ -z $newSdVolumeName ]; then
+#         sdVolumeName=$sdVolumeName
+#     else
+#         sdVolumeName=$newSdVolumeName
+#     fi
+#     echo "* Use $sdVolumeName"
+#     echo "* Replace Docker directory from /home/docker to /media/$sdVolumeName/docker"
+#     sed -i "s/\"data-root\":\"\/.*\/docker\",/\"data-root\":\"\/media\/$sdVolumeName\/docker\",/" $DOCKER_CONF_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
+# fi
+# echo "* Start Docker daemon"
+# /etc/init.d/dockerd start >> $INSTALL_LOG_FILE_PATH 2>&1
 if [ -x "$(command -v docker-compose)" ]; then
-    echo "* Docker-compose already installed"
+    echo "* Docker-compose installation: OK"
 else
-    echo "* Docker-compose ipk download"
-    wget https://github.com/WAGO/docker-compose-ipk/raw/master/docker_compose_1.21.1_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
-    echo "* Docker-compose ipk installation"
-    opkg install docker_compose_1.21.1_armhf.ipk    >> $INSTALL_LOG_FILE_PATH 2>&1
-    rm docker_compose_1.21.1_armhf.ipk              >> $INSTALL_LOG_FILE_PATH 2>&1
+    echo "* Docker-compose not installed please refer to https://github.com/WAGO/docker-compose-ipk"
+    # wget https://github.com/WAGO/docker-compose-ipk/raw/master/docker_compose_1.21.1_armhf.ipk >> $INSTALL_LOG_FILE_PATH 2>&1
+    # echo "* Docker-compose ipk installation"
+    # opkg install docker_compose_1.21.1_armhf.ipk    >> $INSTALL_LOG_FILE_PATH 2>&1
+    # rm docker_compose_1.21.1_armhf.ipk              >> $INSTALL_LOG_FILE_PATH 2>&1
 fi
 
 echo "* Create configuration directory \"containers-confs\""
@@ -76,6 +76,7 @@ cp .env-template .env                               >> $INSTALL_LOG_FILE_PATH 2>
 
 read -p "* Activate node-red container (yes/no) : [no]" activateNodeRed
 if [ $activateNodeRed = "yes"  ] || [ $activateNodeRed = "YES"  ]; then
+    activateNodeRed = true
     echo "* Activate node-red container"
     sed -i "s/  # node-red-service:/  node-red-service:/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
     sed -i "s/  #   image: nodered\/node-red:\${NODERED_VERSION}/    image: nodered\/node-red:\${NODERED_VERSION}/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
@@ -85,8 +86,10 @@ if [ $activateNodeRed = "yes"  ] || [ $activateNodeRed = "YES"  ]; then
     sed -i "s/  #     - 1880:1880/      - 1880:1880/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
     sed -i "s/  #   restart: unless-stopped/    restart: unless-stopped/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
 elif [ $activateNodeRed = "no"  ] || [ $activateNodeRed = "NO"  ]; then
+    activateNodeRed = false
     echo "* Desactivate node-red container"
 else
+    activateNodeRed = false
     echo "* Desactivate node-red container"
 fi
 
@@ -108,13 +111,20 @@ mkdir containers-datas
 chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
 
 echo "* Create containers"
-docker-compose -f "docker-compose.yml" up -d --build >> $INSTALL_LOG_FILE_PATH 2>&1
+docker-compose -f "docker-compose.yml" up -d >> $INSTALL_LOG_FILE_PATH 2>&1
 
 chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
 
 echo "* Installation logs are avaliable in installLogs.log file"
-echo "* You can now publish your MQTT message on the influxdb\/ topic and visualize them in Grafana from the db_metrics database"
-
+echo " "
+echo "* Publish MQTT message on \"influxdb\" topic on 1883 port and localhost or 127.0.0.1 IP adress"
+echo "* All \"influxdb\" topic message will be stored in \"db_metrics\" influxdb database"
+echo " "
+echo "* Access to grafana at http://[IP ADRESS]:3000"
+echo "* Access to portainer at http://[IP ADRESS]:9000"
+if [ $activateNodeRed = "yes"  ]; then
+    echo "* Access to node-red at http://[IP ADRESS]:1880"
+fi
 
 cd ..
 rm install.sh
