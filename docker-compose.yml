@@ -2,44 +2,52 @@ version: '3'
 
 services:
   grafana-service:
-    image: grafana/grafana:${GRAFANA_VERSION}
-    user: ${UID}:${GID}
+    build:
+      context: ./containers-confs/files/grafana/
+      dockerfile: Dockerfile
+      args:
+        - VERSION=${GRAFANA_VERSION}
+        - INFLUXDB_DATASOURCE_USER=${INFLUXDB_ADMIN_USER}
+        - INFLUXDB_DATASOURCE_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
     volumes:
       - ./containers-datas/grafana/data:/var/lib/grafana
-      - ./containers-confs/files/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ./containers-confs/files/grafana/dashboards:/var/lib/grafana/dashboards:ro
-      - ./containers-confs/files/grafana/config/grafana.ini:/etc/grafana/grafana.ini:ro
-      - ./containers-confs/files/grafana/img:/usr/share/grafana/public/img:ro
     ports:
       - 3000:3000
     restart: unless-stopped
   influxdb-service:
       image: influxdb:${INFLUXDB_VERSION}
-      user: ${UID}:${GID}
-      # ports:
-      #   - 8086:8086
       volumes:
         - ./containers-datas/influxdb/data:/var/lib/influxdb
-        - ./containers-confs/script/influxdb/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh:ro
       environment:
         - INFLUXDB_DB=db_metrics
         - INFLUXDB_ADMIN_ENABLED=true
         - INFLUXDB_HTTP_AUTH_ENABLED=true
-        - INFLUXDB_ADMIN_USER=${GENERIC_ADMIN_USER}
-        - INFLUXDB_ADMIN_PASSWORD=${GENERIC_ADMIN_PASSWORD}
+        - INFLUXDB_ADMIN_USER=${INFLUXDB_ADMIN_USER}
+        - INFLUXDB_ADMIN_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
       restart: unless-stopped
-  # node-red-service:
-  #   image: nodered/node-red:${NODERED_VERSION}
-  #   volumes:
-  #     - ./containers-confs/files/node-red/config:/data
-  #   ports:
-  #     - 1880:1880
-  #   restart: unless-stopped
+  node-red-service:
+    build:
+      context: ./containers-confs/files/node-red/
+      dockerfile: Dockerfile
+      args:
+        - VERSION=${NODERED_VERSION}
+    #volumes:
+      #- ./containers-datas/node-red/config:/data
+    environment:
+      - NODERED_ADMIN_USER=${NODERED_ADMIN_USER}
+      - NODERED_ADMIN_PASSWORD_HASH=${NODERED_ADMIN_PASSWORD_HASH}
+    ports:
+      - 1880:1880
+    restart: unless-stopped
   telegraf-service:
-    image: telegraf:${TELEGRAF_VERSION}
-    user: ${UID}:${GID}
+    build:
+      context: ./containers-confs/files/telegraf/
+      dockerfile: Dockerfile
+      args:
+        - VERSION=${TELEGRAF_VERSION}
+        - INFLUXDB_OUTPUT_USER=${INFLUXDB_ADMIN_USER}
+        - INFLUXDB_OUTPUT_PASSWORD=${INFLUXDB_ADMIN_PASSWORD}
     volumes:
-      - ./containers-confs/files/telegraf/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc:/host/proc:ro
     restart: unless-stopped
@@ -47,13 +55,11 @@ services:
       - HOST_PROC=/host/proc
   mqtt-service:
     image: eclipse-mosquitto:${MOSQUITTO_VERSION}
-    user: ${UID}:${GID}
     ports:
       - "1883:1883"
     restart: unless-stopped
   portainer-service:
     image: portainer/portainer:${PORTAINER_VERSION}
-    user: ${UID}:${GID}
     volumes:
       - ./containers-datas/portainer/data:/data
       - /var/run/docker.sock:/var/run/docker.sock
