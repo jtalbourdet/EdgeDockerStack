@@ -1,12 +1,18 @@
-# GMND-Boilerplate
+# EdgeDockerStack
 ![header](documentation/images/header.png)
 ## Indroduction
 
-GMND-Boilerplate is a template for working with Grafana, Influx, Mqtt an d Node-red on Docker. 
+The objective of this project is to facilitate the deployment of Docker containers that I use regularly on WAGO-Contact brand controllers.
 
-The objective of this repository is to facilitate deployment on WAGO PFC200 and Touch-Panels [WAGO-Contact](https://www.wago.com).
+### List of used containers
 
-The [Portainer](https://www.portainer.io/) utility is also integrated into this project in order to facilitate the administration and monitoring of containers
+- Mosqitto
+- Telegraf
+- Influxdb
+- Grafana
+- Node-red
+- Portainer
+
 ## Prerequisite
 
 Docker and Docker-compose must have been installed
@@ -29,17 +35,27 @@ Connect to the equipment in SSH (use for example putty on windows) and go prefer
 cd /media/sd
 ```
 
-Download and run the installation script
+Download the installation script
 
 ```
-wget -O install.sh https://raw.githubusercontent.com/Talbourdet/GMND-Boilerplate/master/install.sh
-
+wget -O install.sh https://raw.githubusercontent.com/Talbourdet/EdgeDockerStack/master/install.sh
+```
+Run the installation script
+```
 /bin/bash install.sh
 ```
-Let the script do and answer the questions. the complete installation can take between 15 and 30 minutes depending on the speed of your connection.
+Move into the EdgeDockerStack directory
+```
+cd EdgeDockerStack
+```
+Build and start the containers
+```
+docker-compose up -d --build
+```
 
 As soon as the installation is complete, the various services are accessible according to the following URLs
 
+* Mosquitto-MQTT at [IP ADRESS]:1883
 * Grafana at http://[IP ADRESS]:3000
 * Portainer at http://[IP ADRESS]:9000
 * Node-red at http://[IP ADRESS]:1880
@@ -54,7 +70,15 @@ All the persitents files are strored in the "containers-datas" directory who is 
 
 The version of the images used as well as the identifiers of the influxdb database can be defined in the .env configuration file
 
-The configuration of the other tools is in the "containers-confs/files" directory. You will find there the configuration files (grafan.ini, telegraf.conf, setting.json...).
+
+The identifier and the hash of the Node-red password can also be customized in the .env configuration file
+The default username is "admin" and the hash corresponds to the password "password"
+```
+NODERED_ADMIN_USER=admin
+NODERED_ADMIN_PASSWORD_HASH=$2b$08$3mbaVbd/FMiBhFPusYnWgOofr2OqVs4llwxWVf8MpHfeA5njd17ni
+```
+
+The configuration files of the other tools are in the "containers-confs/files" directory. You will find there the configuration files (grafan.ini, telegraf.conf, setting.json...).
 
 ## Contributing
 
