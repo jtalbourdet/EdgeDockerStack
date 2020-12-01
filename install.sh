@@ -44,7 +44,7 @@ cp -R -f .env-template .env >> $INSTALL_LOG_FILE_PATH 2>&1
 
 read -e -p "* Activate node-red container (yes/no) : [no]" activateNodeRed
 if [ $activateNodeRed = "yes"  ] || [ $activateNodeRed = "YES"  ]; then
-    activateNodeRed = true
+    activateNodeRed=true
     echo "* Activate node-red container"
     sed -i "s/  # node-red-service:/  node-red-service:/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
     sed -i "s/  #   image: nodered\/node-red:\${NODERED_VERSION}/    image: nodered\/node-red:\${NODERED_VERSION}/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
@@ -54,10 +54,10 @@ if [ $activateNodeRed = "yes"  ] || [ $activateNodeRed = "YES"  ]; then
     sed -i "s/  #     - 1880:1880/      - 1880:1880/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
     sed -i "s/  #   restart: unless-stopped/    restart: unless-stopped/" $DOCKER_COMPOSE_FILE_PATH 2>> $INSTALL_LOG_FILE_PATH
 elif [ $activateNodeRed = "no"  ] || [ $activateNodeRed = "NO"  ]; then
-    activateNodeRed = false
+    activateNodeRed=false
     echo "* Desactivate node-red container"
 else
-    activateNodeRed = false
+    activateNodeRed=false
     echo "* Desactivate node-red container"
 fi
 
@@ -89,7 +89,7 @@ echo "* All \"influxdb\" topic message will be stored in \"db_metrics\" influxdb
 echo " "
 echo "* Access to grafana at http://[IP ADRESS]:3000"
 echo "* Access to portainer at http://[IP ADRESS]:9000"
-if [ $activateNodeRed = "yes"  ]; then
+if [ $activateNodeRed = true  ]; then
     echo "* Access to node-red at http://[IP ADRESS]:1880"
 fi
 
