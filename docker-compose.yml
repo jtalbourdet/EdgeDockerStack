@@ -3,7 +3,6 @@ version: '3'
 services:
   grafana-service:
     image: grafana/grafana:${GRAFANA_VERSION}
-    user: ${UID}:${GID}
     volumes:
       - ./containers-datas/grafana/data:/var/lib/grafana
       - ./containers-confs/files/grafana/provisioning:/etc/grafana/provisioning:ro
@@ -14,8 +13,7 @@ services:
       - 3000:3000
     restart: unless-stopped
   influxdb-service:
-      image: influxdb:${INFLUXDB_VERSION}
-      user: ${UID}:${GID}
+      image: influxdb:${INFLUXDB_VERSION}  
       # ports:
       #   - 8086:8086
       volumes:
@@ -37,7 +35,6 @@ services:
   #   restart: unless-stopped
   telegraf-service:
     image: telegraf:${TELEGRAF_VERSION}
-    user: ${UID}:${GID}
     volumes:
       - ./containers-confs/files/telegraf/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - /var/run/docker.sock:/var/run/docker.sock
@@ -47,13 +44,11 @@ services:
       - HOST_PROC=/host/proc
   mqtt-service:
     image: eclipse-mosquitto:${MOSQUITTO_VERSION}
-    user: ${UID}:${GID}
     ports:
       - "1883:1883"
     restart: unless-stopped
   portainer-service:
     image: portainer/portainer:${PORTAINER_VERSION}
-    user: ${UID}:${GID}
     volumes:
       - ./containers-datas/portainer/data:/data
       - /var/run/docker.sock:/var/run/docker.sock

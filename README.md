@@ -1,8 +1,8 @@
-# GMND-Boilerplate
+# EdgeDockerStack
 ![header](documentation/images/header.png)
 ## Indroduction
 
-GMND-Boilerplate is a template for working with Grafana, Influx, Mqtt an d Node-red on Docker. 
+EdgeDockerStack is a template for working with Grafana, Influx, Mqtt an d Node-red on Docker. 
 
 The objective of this repository is to facilitate deployment on WAGO PFC200 and Touch-Panels [WAGO-Contact](https://www.wago.com).
 
@@ -32,7 +32,7 @@ cd /media/sd
 Download and run the installation script
 
 ```
-wget -O install.sh https://raw.githubusercontent.com/Talbourdet/GMND-Boilerplate/master/install.sh
+wget -O install.sh https://raw.githubusercontent.com/Talbourdet/EdgeDockerStack/master/install.sh
 
 /bin/bash install.sh
 ```
