@@ -21,6 +21,8 @@ mv -f EdgeDockerStack-master EdgeDockerStack
 
 chmod 777 -R EdgeDockerStack >> $INSTALL_LOG_FILE_PATH 2>&1
 
+mv $INSTALL_LOG_FILE_PATH EdgeDockerStack/$INSTALL_LOG_FILE_PATH
+
 cd EdgeDockerStack
 
 
