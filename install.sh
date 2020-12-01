@@ -19,7 +19,6 @@ unzip master.zip >> $INSTALL_LOG_FILE_PATH 2>&1
 rm master.zip >> $INSTALL_LOG_FILE_PATH 2>&1
 mv -f EdgeDockerStack-master EdgeDockerStack
 
-INSTALL_LOG_FILE_PATH
 chmod 777 -R EdgeDockerStack >> $INSTALL_LOG_FILE_PATH 2>&1
 
 cd EdgeDockerStack
