@@ -81,8 +81,12 @@ echo "* Initialise directory read/write rights"
 chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
 chmod 777 -R containers-confs >> $INSTALL_LOG_FILE_PATH 2>&1
 
-echo "* Create containers"
+echo "* Create containers (It can takes about 30min)"
 docker-compose up -d >> $INSTALL_LOG_FILE_PATH 2>&1
+
+echo "* Initialise directory read/write rights"
+chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
+chmod 777 -R containers-confs >> $INSTALL_LOG_FILE_PATH 2>&1
 
 echo "* Installation logs are avaliable in installLogs.log file"
 echo " "
