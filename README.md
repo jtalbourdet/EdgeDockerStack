@@ -15,7 +15,7 @@ Docker and Docker-compose must have been installed
 
 Follow the explanations of these two repositories in order to correctly install docker and docker-compose on your target wago
 
-Readme [WAGO/docker-ipk](https://github.com/WAGO/docker-ipk)
+Readme [WAGO/docker-ipk](https://github.com/WAGO/docker-ipk) (do not forget to restart the electrical system after the installation)
 
 Readme [WAGO/docker-compose-ipk](https://github.com/WAGO/docker-compose-ipk)
 
