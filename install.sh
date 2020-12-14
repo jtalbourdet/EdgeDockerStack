@@ -81,22 +81,39 @@ echo "* Initialise directory read/write rights"
 chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
 chmod 777 -R containers-confs >> $INSTALL_LOG_FILE_PATH 2>&1
 
-echo "* Create containers (It can takes about 30min)"
-docker-compose up -d >> $INSTALL_LOG_FILE_PATH 2>&1
+read -e -p "* Download and create containers (yes/no) : [yes]" downloadCreateContainers
+if [ $downloadCreateContainers = "yes"  ] || [ $downloadCreateContainers = "YES"  ]; then
+    downloadCreateContainers=true
+    echo "* Create containers (It can takes about 30min)"
+    docker-compose up -d >> $INSTALL_LOG_FILE_PATH 2>&1
+    echo "* Initialise directory read/write rights"
+    chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
+    chmod 777 -R containers-confs >> $INSTALL_LOG_FILE_PATH 2>&1
+elif [ $downloadCreateContainers = "no"  ] || [ $downloadCreateContainers = "NO"  ]; then
+    downloadCreateContainers=false
+else
+    downloadCreateContainers=true
+    echo "* Create containers (It can takes about 30min)"
+    docker-compose up -d >> $INSTALL_LOG_FILE_PATH 2>&1
+    echo "* Initialise directory read/write rights"
+    chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
+    chmod 777 -R containers-confs >> $INSTALL_LOG_FILE_PATH 2>&1
+fi
 
-echo "* Initialise directory read/write rights"
-chmod 777 -R containers-datas >> $INSTALL_LOG_FILE_PATH 2>&1
-chmod 777 -R containers-confs >> $INSTALL_LOG_FILE_PATH 2>&1
-
-echo "* Installation logs are avaliable in installLogs.log file"
-echo " "
-echo "* Publish MQTT message on \"influxdb\" topic on 1883 port and localhost or 127.0.0.1 IP adress"
-echo "* All \"influxdb\" topic message will be stored in \"db_metrics\" influxdb database"
-echo " "
-echo "* Access to grafana at http://[IP ADRESS]:3000"
-echo "* Access to portainer at http://[IP ADRESS]:9000"
-if [ $activateNodeRed = true  ]; then
-    echo "* Access to node-red at http://[IP ADRESS]:1880"
+if [ $downloadCreateContainers = true  ]; then
+    echo "* Installation logs are avaliable in installLogs.log file"
+    echo " "
+    echo "* Publish MQTT message on \"influxdb\" topic on 1883 port and localhost or 127.0.0.1 IP adress"
+    echo "* All \"influxdb\" topic message will be stored in \"db_metrics\" influxdb database"
+    echo " "
+    echo "* Access to grafana at http://[IP ADRESS]:3000"
+    echo "* Access to portainer at http://[IP ADRESS]:9000"
+    if [ $activateNodeRed = true  ]; then
+        echo "* Access to node-red at http://[IP ADRESS]:1880"
+    fi
+else
+    echo "* Configuration is OK"
+    echo "* You can now customize the EdgeDockerStack/docker-compose.yml  and/or start it with docker-compose up -d"
 fi
 
 echo "* Remove installation script"
