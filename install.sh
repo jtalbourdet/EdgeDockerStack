@@ -113,7 +113,7 @@ if [ $downloadCreateContainers = true  ]; then
     fi
 else
     echo "* Configuration is OK"
-    echo "* You can now customize the EdgeDockerStack/docker-compose.yml  and/or start it with docker-compose up -d"
+    echo "* You can now customize the EdgeDockerStack/docker-compose.yml  and / or start it with docker-compose commands"
 fi
 
 echo "* Remove installation script"
